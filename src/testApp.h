@@ -15,9 +15,13 @@ public:
 	void update();
 	void draw();
     
-    void updateCV();
-    void drawCV();
+    void update2();
+    void draw2();
+    
+    void resizeAll();
+    
     void generateSymbol();
+    void drawSymbols();
 	
 	void keyPressed(int key);
 	void keyReleased(int key);
@@ -29,22 +33,40 @@ public:
 	
     int disW, disH;
     bool fullscreen;
+
     
-	ofxBox2d                            box2d;			  //	the box2d world
-	vector    <shared_ptr<ofxBox2dCircle> >	circles;		  //	default box2d circles
-	vector	  <shared_ptr<ofxBox2dRect> >	boxes;			  //	defalut box2d rects
+    vector <bool> insertNewImage;
+    bool maxImgReached;
+    vector<ofImage> colImgs[5];
+    vector<ofPoint> imgPos[5];
+    
         
     vector <ofImage> images;
-    float scaleImage = 0.25f;
+    map<shared_ptr<ofxBox2dCircle>, shared_ptr<ofImage>> mappedImgs;
+    float scaleImage;
+    int nDivisions;
     int screenDiv;
-    int colChoice = 0;
-
-    ofPolyline groundLine;
-    ofxBox2dEdge groundEdge;
+    int colChoice;
 
     int geneCounter;
     
-    // Open CV
+    // ----------------- //
+    // ---- PHYSICS ---- //
+    void setupPhysics();
+    void updatePhysics();
+    
+    ofxBox2d box2d;
+    vector <shared_ptr<ofxBox2dCircle>>	circles;
+    ofPolyline groundLine;
+    ofxBox2dEdge groundEdge;
+    
+    
+    // ----------------- //
+    // ---- OPEN CV ---- //
+    void setupCV();
+    void updateCV();
+    void drawCV();
+    
     #ifdef _USE_LIVE_VIDEO
         ofVideoGrabber vidGrabber;
     #else
