@@ -1,6 +1,8 @@
 #pragma once
 #include "ofMain.h"
 
+#include "ofxBox2d.h"
+
 // -------------------------------------------------
 
 class testApp : public ofBaseApp {
@@ -18,13 +20,13 @@ public:
 	void mouseReleased(int x, int y, int button);
 	void resized(int w, int h);
     
-    bool fullscreen;
-    
     void setupSavescreen();
     void updateSavescreen();
     void drawSavescreen();
     
     void resizeAll();
+    
+    bool fullscreen;
     
     vector<ofImage*> labanSymbol;
     int nSymbols;
@@ -42,5 +44,9 @@ public:
     vector<vector<int>> symbolIdx;
     vector<vector<ofPoint>> symbolPos;
     vector<vector<ofVec2f>> symbolSize;
+    vector<vector<int>> symbolAlpha;
+    
+    ofPoint mousePos;
+
 };
 

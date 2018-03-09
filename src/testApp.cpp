@@ -30,9 +30,9 @@ void testApp::setupSavescreen() {
     nSymbols = labanSymbol.size();
     
     // Screen Div
-    fallingSpeed = 2.5f; // pixel per frame
+    fallingSpeed = 1.5f; // pixel per frame
     nColumns = 6;
-    nSymbolsPerCol = 6;
+    nSymbolsPerCol = 8;
     screenHeight = ofGetHeight();
     colWidth = int(float(ofGetWidth())/float(nColumns));
     marginWidth = colWidth * 0.1f;
@@ -43,6 +43,7 @@ void testApp::setupSavescreen() {
         vector<ofPoint> oneColumnPos;
         vector<ofVec2f> oneColumnSizes;
         vector<int> oneColumnIdx;
+        vector<int> oneColumnAlpha;
         int posX = marginWidth + colWidth * i;
         int posY = 0;
         int choice = 0;
@@ -68,11 +69,13 @@ void testApp::setupSavescreen() {
             oneColumnPos.push_back(ofPoint(posX, posY));
             // Save choice
             prevChoice = choice;
+            oneColumnAlpha.push_back(255);
         }
         colSymbols.push_back(oneColumn);
         symbolIdx.push_back(oneColumnIdx);
         symbolPos.push_back(oneColumnPos);
         symbolSize.push_back(oneColumnSizes);
+        symbolAlpha.push_back(oneColumnAlpha);
     }
 }
 
@@ -95,6 +98,7 @@ void testApp::resizeAll(){
             // Assign Pos
             posY += - marginWidth - height;
             symbolPos[i][j] = ofPoint(posX, posY);
+            symbolAlpha[i][j] = 255;
         }
     }
 }
@@ -113,6 +117,19 @@ void testApp::updateSavescreen() {
     for(int i=0; i<symbolPos.size(); i++){
         for(int j=0; j<symbolPos[i].size(); j++){
             symbolPos[i][j].y += fallingSpeed;
+            if( symbolPos[i][j].y < 3*screenHeight/4 ){
+                if( ofRectangle(symbolPos[i][j].x, symbolPos[i][j].y,
+                                symbolSize[i][j].x, symbolSize[i][j].y).inside(mousePos.x, mousePos.y) ){
+                    symbolAlpha[i][j] -= 2;
+                }
+            } else if( symbolPos[i][j].y > 3*screenHeight/4 && symbolPos[i][j].y < screenHeight){
+                if(symbolAlpha[i][j] > 50){
+                    symbolAlpha[i][j] = ofMap(symbolPos[i][j].y,
+                                              3*screenHeight/4, screenHeight,
+                                              symbolAlpha[i][j], 50);
+                }
+            }
+            
             if( symbolPos[i][j].y > screenHeight ){
                 // Get previous index
                 int prevIdx;
@@ -142,7 +159,8 @@ void testApp::updateSavescreen() {
                 symbolSize[i][j].y = colSymbols[i][j]->getHeight() * scale;
                 // Assign New Pos
                 symbolPos[i][j].y = symbolPos[i][prevIdx].y - symbolSize[i][j].y - marginHeight;
-
+                // Reset Alpha
+                symbolAlpha[i][j] = 255;
             }
         }
     }
@@ -152,11 +170,9 @@ void testApp::updateSavescreen() {
 void testApp::drawSavescreen() {
     for(int i=0; i<colSymbols.size(); i++){
         for(int j=0; j<colSymbols[i].size(); j++){
-            if(symbolPos[i][j].y > -symbolSize[i][j].y-marginHeight &&
-               symbolPos[i][j].y < ofGetHeight()){
-                colSymbols[i][j]->draw(symbolPos[i][j].x, symbolPos[i][j].y,
-                                       symbolSize[i][j].x, symbolSize[i][j].y);
-            }
+            ofSetColor(255, 255, 255, symbolAlpha[i][j]);
+            colSymbols[i][j]->draw(symbolPos[i][j].x, symbolPos[i][j].y,
+                                   symbolSize[i][j].x, symbolSize[i][j].y);
         }
     }
     
@@ -170,7 +186,6 @@ void testApp::drawSavescreen() {
 
 //--------------------------------------------------------------
 void testApp::draw() {
-
     drawSavescreen();
 }
 
@@ -191,7 +206,8 @@ void testApp::keyReleased(int key) {
 
 //--------------------------------------------------------------
 void testApp::mouseMoved(int x, int y ) {
-	
+    mousePos.x = x;
+    mousePos.y = y;
 }
 
 //--------------------------------------------------------------
