@@ -1,7 +1,6 @@
 #pragma once
 #include "ofMain.h"
-
-#include "ofxBox2d.h"
+#include "labanScreensaver.h"
 
 // -------------------------------------------------
 
@@ -20,33 +19,10 @@ public:
 	void mouseReleased(int x, int y, int button);
 	void resized(int w, int h);
     
-    void setupSavescreen();
-    void updateSavescreen();
-    void drawSavescreen();
-    
-    void resizeAll();
-    
     bool fullscreen;
     
-    vector<ofImage*> labanSymbol;
-    int nSymbols;
+    labanScreensaver labanScreensaver;
     
-    int nColumns;
-    int screenHeight;
-    int colWidth;
-    float marginWidth;
-    float marginHeight;
-    float imgWidth;
-    float fallingSpeed; // pixel per frame
-
-    int nSymbolsPerCol;
-    vector<vector<ofImage*>> colSymbols;
-    vector<vector<int>> symbolIdx;
-    vector<vector<ofPoint>> symbolPos;
-    vector<vector<ofVec2f>> symbolSize;
-    vector<vector<int>> symbolAlpha;
-    
-    ofPoint mousePos;
-
+    ofPoint mousePos[2];
 };
 
