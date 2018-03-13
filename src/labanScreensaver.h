@@ -17,6 +17,7 @@ class labanScreensaver : public ofBaseApp {
         int screenWidth;
     
         vector<ofImage*> labanSymbol;
+        ofColor labanColor[6];
         int nSymbols;
     
         int nColumns;
@@ -37,4 +38,5 @@ class labanScreensaver : public ofBaseApp {
         vector<vector<ofPoint>> symbolPos;
         vector<vector<ofVec2f>> symbolSize;
         vector<vector<int>> symbolAlpha;
+        vector<vector<ofColor>> symbolColor;
 };

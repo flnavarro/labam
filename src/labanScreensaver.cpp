@@ -26,6 +26,14 @@ void labanScreensaver::setup() {
     }
     nSymbols = labanSymbol.size();
     
+    // Colors
+    labanColor[0] = ofColor(13, 20, 13);
+    labanColor[1] = ofColor(16, 34, 38);
+    labanColor[2] = ofColor(104, 140, 137);
+    labanColor[3] = ofColor(129, 191, 181);
+    labanColor[4] = ofColor(73, 73, 73);
+    labanColor[5] = ofColor(241, 242, 242);
+    
     // Opciones
     fadeoutIsActive = false; // fade out en la parte baja de la pantalla
     alphaDecrease = 5; // cuánto alpha quitamos al haber una mano encima de la img
@@ -47,6 +55,7 @@ void labanScreensaver::setup() {
         vector<ofVec2f> oneColumnSizes;
         vector<int> oneColumnIdx;
         vector<int> oneColumnAlpha;
+        vector<ofColor> oneColumnColor;
         int posX = marginWidth + colWidth * i;
         int posY = 0;
         int choice = 0;
@@ -73,12 +82,16 @@ void labanScreensaver::setup() {
             // Save choice
             prevChoice = choice;
             oneColumnAlpha.push_back(255);
+            // Assign Color
+            int colorChoice = ofRandom(0, 5);
+            oneColumnColor.push_back(labanColor[colorChoice]);
         }
         colSymbols.push_back(oneColumn);
         symbolIdx.push_back(oneColumnIdx);
         symbolPos.push_back(oneColumnPos);
         symbolSize.push_back(oneColumnSizes);
         symbolAlpha.push_back(oneColumnAlpha);
+        symbolColor.push_back(oneColumnColor);
     }
 }
 
@@ -184,11 +197,12 @@ void labanScreensaver::draw() {
     
     for(int i=0; i<colSymbols.size(); i++){
         for(int j=0; j<colSymbols[i].size(); j++){
-            
+            ofPushStyle();
             // Draw symbols
-            ofSetColor(255, 255, 255, symbolAlpha[i][j]);
+            ofSetColor(symbolColor[i][j], symbolAlpha[i][j]);
             colSymbols[i][j]->draw(symbolPos[i][j].x, symbolPos[i][j].y,
                                    symbolSize[i][j].x, symbolSize[i][j].y);
+            ofPopStyle();
         }
     }
     
