@@ -12,7 +12,7 @@
 void labanScreensaver::setup() {
     
     // Debug
-    debug = false;
+    debug = true;
     
     // Symbols
     string path = "symbols/";
@@ -184,6 +184,9 @@ void labanScreensaver::update(ofPoint handPos[2]) {
                 symbolPos[i][j].y = symbolPos[i][prevIdx].y - symbolSize[i][j].y - marginHeight;
                 // Reset Alpha
                 symbolAlpha[i][j] = 255;
+                // Assign New Color
+                int colorChoice = ofRandom(0, 5);
+                symbolColor[i][j] = labanColor[colorChoice];
             }
         }
     }
